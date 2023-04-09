@@ -41,6 +41,11 @@ if ! flyctl status --app "$app"; then
   if [ -n "$INPUT_SECRETS" ]; then
     echo $INPUT_SECRETS | tr " " "\n" | flyctl secrets import --app "$app"
   fi
+  
+  if ["$INPUT_IP" == "true"]; then
+   flyctl ips allocate-v4 --app "$app"
+  fi
+  
   flyctl deploy --app "$app" --region "$region" --image "$image" --region "$region" --strategy immediate
 elif [ "$INPUT_UPDATE" != "false" ]; then
   flyctl deploy --config "$config" --app "$app" --region "$region" --image "$image" --region "$region" --strategy immediate
